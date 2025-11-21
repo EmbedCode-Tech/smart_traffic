@@ -5,13 +5,15 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+  apiKey: "AIzaSyAVWRJFpMoksy3PFetDie5hVXPI5tQJM4w",
+  authDomain: "smart-traffic-c5998.firebaseapp.com",
+  projectId: "smart-traffic-c5998",
+  storageBucket: "smart-traffic-c5998.firebasestorage.app",
+  messagingSenderId: "218505366734",
+  appId: "1:218505366734:web:4beba71abf4f1df282d49f",
+  measurementId: "G-QX4X5GD3WT"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
