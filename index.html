@@ -1,1 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Traffic Verification</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- QR generator library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- html5-qrcode for camera scanning -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js"></script>
+  <!-- Firebase (v9 modular) -->
+  <script type="module" src="app.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Smart Traffic Verification</h1>
+      <p>Enter details → generate QR → verification via camera</p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Register Vehicle / Generate QR</h2>
+        <form id="registerForm">
+          <label>
+            Full Name
+            <input id="name" required placeholder="Rohit Jadhav" />
+          </label>
+          <label>
+            Vehicle Number
+            <input id="vehicle" required placeholder="MH09AB1234" />
+          </label>
+          <label>
+            License Number
+            <input id="license" required placeholder="DL-0123456789" />
+          </label>
+          <label>
+            Insurance Expiry Date
+            <input id="expiry" type="date" required />
+          </label>
+          <div class="actions">
+            <button type="submit">Save & Generate QR</button>
+            <button type="button" id="clearForm">Clear</button>
+          </div>
+        </form>
+
+        <div id="result" class="result hidden">
+          <h3>QR Code</h3>
+          <div id="qrcode"></div>
+          <div class="doc-info">
+            <p><strong>Document ID:</strong> <span id="docId"></span></p>
+            <button id="downloadQR">Download QR (png)</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Verification (Scan QR)</h2>
+        <p>Open this page on the enforcement phone/tablet and allow camera access.</p>
+
+        <div id="scanner" class="scanner">
+          <div id="reader" style="width:100%"></div>
+          <div class="scanner-controls">
+            <button id="startScan">Start Scanner</button>
+            <button id="stopScan" disabled>Stop Scanner</button>
+          </div>
+        </div>
+
+        <div id="verifyResult" class="verify hidden">
+          <h3 id="statusText"></h3>
+          <div id="details"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>Development version — secure Firestore rules before production.</small>
+    </footer>
+  </div>
+</body>
+</html>
 
