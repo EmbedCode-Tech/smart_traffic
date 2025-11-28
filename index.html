@@ -5,130 +5,200 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Smart Traffic Verification</title>
   <link rel="stylesheet" href="styles.css" />
+
   <!-- QR generator library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <!-- html5-qrcode for camera scanning -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js"></script>
-  <!-- Firebase (v9 modular) -->
+
+  <!-- Firebase app.js -->
   <script type="module" src="app.js" defer></script>
+
   <style>
     :root{
-  --bg: #f7fafc;
-  --card: #ffffff;
-  --accent: #0b79d0;
-  --success: #16a34a;
-  --danger: #ef4444;
-  --muted: #6b7280;
-}
-*{box-sizing:border-box}
-body{
-  font-family: Inter, system-ui, Arial;
-  margin:0;
-  background:var(--bg);
-  color:#111827;
-}
-.container{
-  max-width:980px;
-  margin:28px auto;
-  padding:12px;
-}
-header{ text-align:center; margin-bottom:18px }
-.card{
-  background:var(--card);
-  border-radius:12px;
-  padding:18px;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-  margin-bottom:16px;
-}
-label{ display:block; margin-bottom:10px; font-size:14px; color:var(--muted) }
-input[type="text"],
-input[type="date"],
-input[type="search"],
-input[type="number"]{
-  width:100%;
-  padding:10px 12px;
-  border-radius:8px;
-  border:1px solid #e5e7eb;
-  margin-top:6px;
-  font-size:15px;
-}
-.actions{
-  margin-top:12px;
-  display:flex;
-  gap:8px;
-}
-button{
-  background:var(--accent);
-  color:white;
-  padding:10px 14px;
-  border-radius:10px;
-  border:none;
-  font-weight:600;
-  cursor:pointer;
-}
-button[disabled]{opacity:0.6; cursor:not-allowed}
-button#clearForm{ background:#6b7280 }
-#qrcode{ margin-top:12px; display:inline-block; padding:10px; background:white; border-radius:8px }
-.result, .verify{ margin-top:12px }
-.hidden{ display:none }
-.scanner{ display:flex; flex-direction:column; gap:8px }
-.scanner-controls{ margin-top:8px; display:flex; gap:8px }
-#statusText{ font-size:18px; margin-bottom:6px }
-#details{ font-size:15px; background:#f9fafb; padding:10px; border-radius:8px; border:1px solid #eef2f7 }
-.doc-info{ margin-top:8px; display:flex; gap:10px; align-items:center }
-footer{ text-align:center; margin-top:16px; color:var(--muted) }
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --accent: #0b79d0;
+      --success: #16a34a;
+      --danger: #ef4444;
+      --muted: #6b7280;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: Inter, system-ui, Arial;
+      margin:0;
+      background:var(--bg);
+      color:#111827;
+    }
+    .container{
+      max-width:980px;
+      margin:28px auto;
+      padding:12px;
+    }
+    header{ text-align:center; margin-bottom:18px }
+    .card{
+      background:var(--card);
+      border-radius:12px;
+      padding:18px;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+      margin-bottom:16px;
+    }
+    h2{ margin-top:0 }
+    label{ display:block; margin-bottom:10px; font-size:14px; color:var(--muted) }
+    input[type="text"],
+    input[type="date"],
+    input[type="search"],
+    input[type="number"]{
+      width:100%;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid #e5e7eb;
+      margin-top:6px;
+      font-size:15px;
+    }
+    .actions{
+      margin-top:12px;
+      display:flex;
+      gap:8px;
+    }
+    button{
+      background:var(--accent);
+      color:white;
+      padding:10px 14px;
+      border-radius:10px;
+      border:none;
+      font-weight:600;
+      cursor:pointer;
+    }
+    button[disabled]{opacity:0.6; cursor:not-allowed}
+    button#clearForm{ background:#6b7280 }
+
+    #qrcode{ margin-top:12px; display:inline-block; padding:10px; background:white; border-radius:8px }
+    .result, .verify{ margin-top:12px }
+    .hidden{ display:none }
+
+    #reader{
+      width:100%;
+      max-width:400px;
+      margin:auto;
+      border-radius:12px;
+      overflow:hidden;
+    }
+
+    .scanner-controls{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+    }
+
+    #statusText{
+      font-size:18px;
+      margin-bottom:6px;
+      text-align:center;
+    }
+
+    #details{
+      font-size:15px;
+      background:#f9fafb;
+      padding:10px;
+      border-radius:8px;
+      border:1px solid #eef2f7;
+    }
+
+    footer{
+      text-align:center;
+      margin-top:18px;
+      color:var(--muted);
+    }
 
   </style>
 </head>
 <body>
   <div class="container">
+
     <header>
       <h1>Smart Traffic Verification</h1>
-    
     </header>
 
-    <main>
-      <section class="card">
-        <h2>Register Vehicle / Generate QR</h2>
-        <form id="registerForm">
-          <label>
-            Full Name
-            <input id="name" required placeholder="Rohit Jadhav" />
-          </label>
-          <label>
-            Vehicle Number
-            <input id="vehicle" required placeholder="MH09AB1234" />
-          </label>
-          <label>
-            License Number
-            <input id="license" required placeholder="DL-0123456789" />
-          </label>
-          <label>
-            Insurance Expiry Date
-            <input id="expiry" type="date" required />
-          </label>
-          <div class="actions">
-            <button type="submit">Save & Generate QR</button>
-            <button type="button" id="clearForm">Clear</button>
-          </div>
-        </form>
+    <!-- Registration + QR -->
+    <section class="card">
+      <h2>Register Vehicle / Generate QR</h2>
 
-        <div id="result" class="result hidden">
-          <h3>QR Code</h3>
-          <div id="qrcode"></div>
-          <div class="doc-info">
-            <p><strong>Document ID:</strong> <span id="docId"></span></p>
-            <button id="downloadQR">Download QR (png)</button>
-          </div>
+      <form id="registerForm">
+
+        <label>
+          Full Name
+          <input id="name" required placeholder="Rohit Jadhav" />
+        </label>
+
+        <label>
+          Vehicle Number
+          <input id="vehicle" required placeholder="MH09AB1234" />
+        </label>
+
+        <label>
+          License Number
+          <input id="license" required placeholder="DL-0123456789" />
+        </label>
+
+        <label>
+          Insurance Expiry Date
+          <input id="expiry" type="date" required />
+        </label>
+
+        <!-- PUC ADDED -->
+        <label>
+          PUC Number
+          <input id="pucNumber" required placeholder="PUC-000123" />
+        </label>
+
+        <label>
+          PUC Expiry Date
+          <input id="pucExpiry" type="date" required />
+        </label>
+
+        <div class="actions">
+          <button type="submit">Save & Generate QR</button>
+          <button type="button" id="clearForm">Clear</button>
         </div>
-      </section>
 
-    </main>
+      </form>
+
+      <div id="result" class="result hidden">
+        <h3>QR Code</h3>
+        <div id="qrcode"></div>
+
+        <div class="doc-info">
+          <p><strong>Document ID:</strong> <span id="docId"></span></p>
+          <button id="downloadQR">Download QR (png)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scanner Section -->
+    <section class="card">
+      <h2>Verify Using Scanner</h2>
+
+      <div id="reader"></div>
+
+      <div class="scanner-controls">
+        <button id="startScan">Start Scan</button>
+        <button id="stopScan" disabled>Stop Scan</button>
+      </div>
+
+      <div id="verifyResult" class="verify hidden">
+        <h3>Verification Result</h3>
+        <p id="statusText"></p>
+        <div id="details"></div>
+      </div>
+    </section>
 
     <footer>
       <small>Development version — secure Firestore rules before production.</small>
     </footer>
+
   </div>
 </body>
 </html>
-
